@@ -8,6 +8,7 @@ import com.tencent.mmkv.MMKV;
 
 import snow.music.store.MusicStore;
 import snow.music.util.NightModeUtil;
+import snow.music.util.SoundPoolUtils;
 
 public class Application extends MultiDexApplication {
     @Override
@@ -19,5 +20,6 @@ public class Application extends MultiDexApplication {
         MusicStore.init(this);
 
         SpeechUtility.createUtility(this, SpeechConstant.APPID + "=1904e480");
+        SoundPoolUtils.getInstance().init(this);
     }
 }

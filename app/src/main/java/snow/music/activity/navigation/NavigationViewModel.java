@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.databinding.ObservableField;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
@@ -43,6 +44,7 @@ import snow.music.activity.setting.SettingActivity;
 import snow.music.store.MusicStore;
 import snow.music.util.FavoriteObserver;
 import snow.music.util.MusicUtil;
+import snow.music.util.SoundPoolUtils;
 import snow.player.PlaybackState;
 import snow.player.PlayerClient;
 import snow.player.audio.MusicItem;
@@ -251,20 +253,18 @@ public class NavigationViewModel extends ViewModel {
      * 初始化监听器。
      */
 
-
     public void testAudio(View view) {
         mIatResults.clear();
+        SoundPoolUtils.getInstance().playStart();
         RecognizerDialog mIatDialog = new RecognizerDialog(view.getContext(), new InitListener() {
             @Override
             public void onInit(int i) {
 
             }
         });
-
         mIatDialog.setListener(new RecognizerDialogListener() {
             @Override
             public void onResult(RecognizerResult recognizerResult, boolean isLast) {
-
                 printResult(recognizerResult, isLast);
             }
 
@@ -277,6 +277,8 @@ public class NavigationViewModel extends ViewModel {
     }
 
     private HashMap<String, String> mIatResults = new LinkedHashMap<>();
+
+    public final ObservableField<String> strResult = new ObservableField<>();
 
     private void printResult(RecognizerResult results, boolean isLast) {
         String text = JsonParser.parseIatResult(results.getResultString());
@@ -295,7 +297,9 @@ public class NavigationViewModel extends ViewModel {
         }
         String a = resultBuffer.toString();
         if (isLast) {
+            SoundPoolUtils.getInstance().playStart();
             Log.e("printResult", a);
+            strResult.set(a);
         }
     }
 }

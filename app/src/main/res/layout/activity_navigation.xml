@@ -316,6 +316,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:orientation="vertical"
             android:gravity="center">
 
             <Button
@@ -325,6 +326,11 @@
                 android:onClick="@{(view) -> navViewModel.testAudio(view)}"
                 android:text="@string/test_audio" />
 
+            <TextView
+                android:layout_width="match_parent"
+                android:id="@+id/tvResult"
+                android:text="@{navViewModel.strResult}"
+                android:layout_height="wrap_content"/>
         </LinearLayout>
 
         <FrameLayout
