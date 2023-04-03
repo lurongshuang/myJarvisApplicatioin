@@ -76,4 +76,6 @@ dependencies {
 
     // pinyin-comparator
     implementation 'com.github.jrfeng:pinyin-comparator:1.0.3'
+
+    implementation files('libs/Msc.jar')
 }
