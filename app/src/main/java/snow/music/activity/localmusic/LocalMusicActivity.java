@@ -43,9 +43,9 @@ public class LocalMusicActivity extends ListActivity {
                     .commit();
         }
 
-        if (noPermission() && localMusicIsEmpty() && shouldShowRequestPermissionRationale()) {
-            scanMusic();
-        }
+//        if (noPermission() && localMusicIsEmpty() && shouldShowRequestPermissionRationale()) {
+//            scanMusic();
+//        }
     }
 
     private void initPlayerClient() {

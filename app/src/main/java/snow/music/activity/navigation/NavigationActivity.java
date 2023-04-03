@@ -1,8 +1,10 @@
 package snow.music.activity.navigation;
 
+import androidx.core.app.ActivityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.Manifest;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -46,12 +48,15 @@ public class NavigationActivity extends BaseActivity {
 
         observerPlayingMusicItem();
 
-        if (shouldScanLocalMusic()) {
-            scanLocalMusic();
-        }
+//        if (shouldScanLocalMusic()) {
+//            scanLocalMusic();
+//        }
 
         mIconCornerRadius = DimenUtil.getDimenPx(getResources(), R.dimen.album_icon_corner_radius);
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, 123);
     }
+
+
 
     private void initAllViewModel() {
         ViewModelProvider viewModelProvider = new ViewModelProvider(this);

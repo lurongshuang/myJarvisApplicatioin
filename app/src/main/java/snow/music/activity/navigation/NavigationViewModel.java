@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Handler;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
@@ -254,26 +255,32 @@ public class NavigationViewModel extends ViewModel {
      */
 
     public void testAudio(View view) {
-        mIatResults.clear();
         SoundPoolUtils.getInstance().playStart();
-        RecognizerDialog mIatDialog = new RecognizerDialog(view.getContext(), new InitListener() {
+        new Handler().postDelayed(new Runnable() {  // 开启的runnable也会在这个handler所依附线程中运行，即主线程
             @Override
-            public void onInit(int i) {
+            public void run() {
+                mIatResults.clear();
+                RecognizerDialog mIatDialog = new RecognizerDialog(view.getContext(), new InitListener() {
+                    @Override
+                    public void onInit(int i) {
 
-            }
-        });
-        mIatDialog.setListener(new RecognizerDialogListener() {
-            @Override
-            public void onResult(RecognizerResult recognizerResult, boolean isLast) {
-                printResult(recognizerResult, isLast);
-            }
+                    }
+                });
+                mIatDialog.setListener(new RecognizerDialogListener() {
+                    @Override
+                    public void onResult(RecognizerResult recognizerResult, boolean isLast) {
+                        printResult(recognizerResult, isLast);
+                    }
 
-            @Override
-            public void onError(SpeechError speechError) {
-                Log.e("", "");
+                    @Override
+                    public void onError(SpeechError speechError) {
+                        Log.e("", "");
+                    }
+                });
+                mIatDialog.show();
             }
-        });
-        mIatDialog.show();
+        }, 1000);
+
     }
 
     private HashMap<String, String> mIatResults = new LinkedHashMap<>();
@@ -297,7 +304,7 @@ public class NavigationViewModel extends ViewModel {
         }
         String a = resultBuffer.toString();
         if (isLast) {
-            SoundPoolUtils.getInstance().playStart();
+            SoundPoolUtils.getInstance().playEnd();
             Log.e("printResult", a);
             strResult.set(a);
         }
