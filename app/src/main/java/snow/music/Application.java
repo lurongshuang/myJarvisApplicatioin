@@ -2,6 +2,8 @@ package snow.music;
 
 import androidx.multidex.MultiDexApplication;
 
+import com.iflytek.cloud.SpeechConstant;
+import com.iflytek.cloud.SpeechUtility;
 import com.tencent.mmkv.MMKV;
 
 import snow.music.store.MusicStore;
@@ -15,5 +17,7 @@ public class Application extends MultiDexApplication {
         MMKV.initialize(this);
         NightModeUtil.applyNightMode(this);
         MusicStore.init(this);
+
+        SpeechUtility.createUtility(this, SpeechConstant.APPID + "=1904e480");
     }
 }

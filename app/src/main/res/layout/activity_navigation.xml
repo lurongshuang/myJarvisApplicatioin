@@ -320,9 +320,10 @@
 
             <Button
                 android:id="@+id/tvTestAudio"
-                text="@string/test_audio"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:onClick="@{(view) -> navViewModel.testAudio(view)}"
+                android:text="@string/test_audio" />
 
         </LinearLayout>
 

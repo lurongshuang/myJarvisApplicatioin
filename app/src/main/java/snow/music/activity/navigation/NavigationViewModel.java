@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -17,6 +18,17 @@ import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import com.google.common.base.Preconditions;
+import com.iflytek.cloud.InitListener;
+import com.iflytek.cloud.RecognizerResult;
+import com.iflytek.cloud.SpeechError;
+import com.iflytek.cloud.ui.RecognizerDialog;
+import com.iflytek.cloud.ui.RecognizerDialogListener;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import snow.music.R;
 import snow.music.activity.browser.album.AlbumBrowserActivity;
@@ -35,6 +47,7 @@ import snow.player.PlaybackState;
 import snow.player.PlayerClient;
 import snow.player.audio.MusicItem;
 import snow.player.lifecycle.PlayerViewModel;
+import snow.music.util.JsonParser;
 
 public class NavigationViewModel extends ViewModel {
     private final MutableLiveData<Integer> mFavoriteDrawable;
@@ -51,8 +64,7 @@ public class NavigationViewModel extends ViewModel {
     public NavigationViewModel() {
         mFavoriteDrawable = new MutableLiveData<>(R.drawable.ic_favorite_false);
         mSecondaryText = new MutableLiveData<>("");
-        mFavoriteObserver = new FavoriteObserver(favorite ->
-                mFavoriteDrawable.setValue(favorite ? R.drawable.ic_favorite_true : R.drawable.ic_favorite_false));
+        mFavoriteObserver = new FavoriteObserver(favorite -> mFavoriteDrawable.setValue(favorite ? R.drawable.ic_favorite_true : R.drawable.ic_favorite_false));
         mArtistObserver = artist -> updateSecondaryText();
         mErrorObserver = error -> updateSecondaryText();
         mPlayingMusicItemObserver = mFavoriteObserver::setMusicItem;
@@ -232,5 +244,58 @@ public class NavigationViewModel extends ViewModel {
     private void startActivity(Context context, Class<? extends Activity> activity) {
         Intent intent = new Intent(context, activity);
         context.startActivity(intent);
+    }
+
+
+    /**
+     * 初始化监听器。
+     */
+
+
+    public void testAudio(View view) {
+        mIatResults.clear();
+        RecognizerDialog mIatDialog = new RecognizerDialog(view.getContext(), new InitListener() {
+            @Override
+            public void onInit(int i) {
+
+            }
+        });
+
+        mIatDialog.setListener(new RecognizerDialogListener() {
+            @Override
+            public void onResult(RecognizerResult recognizerResult, boolean isLast) {
+
+                printResult(recognizerResult, isLast);
+            }
+
+            @Override
+            public void onError(SpeechError speechError) {
+                Log.e("", "");
+            }
+        });
+        mIatDialog.show();
+    }
+
+    private HashMap<String, String> mIatResults = new LinkedHashMap<>();
+
+    private void printResult(RecognizerResult results, boolean isLast) {
+        String text = JsonParser.parseIatResult(results.getResultString());
+        String sn = null;
+        // 读取json结果中的sn字段
+        try {
+            JSONObject resultJson = new JSONObject(results.getResultString());
+            sn = resultJson.optString("sn");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        mIatResults.put(sn, text);
+        StringBuffer resultBuffer = new StringBuffer();
+        for (String key : mIatResults.keySet()) {
+            resultBuffer.append(mIatResults.get(key));
+        }
+        String a = resultBuffer.toString();
+        if (isLast) {
+            Log.e("printResult", a);
+        }
     }
 }
