@@ -8,6 +8,7 @@ import com.tencent.mmkv.MMKV;
 
 import snow.music.store.MusicStore;
 import snow.music.util.NightModeUtil;
+import snow.music.util.PlayerUtils;
 import snow.music.util.SoundPoolUtils;
 
 public class Application extends MultiDexApplication {
@@ -21,5 +22,6 @@ public class Application extends MultiDexApplication {
 
         SpeechUtility.createUtility(this, SpeechConstant.APPID + "=1904e480");
         SoundPoolUtils.getInstance().init(this);
+        PlayerUtils.getInstance().init(this);
     }
 }

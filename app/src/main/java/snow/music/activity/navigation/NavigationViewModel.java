@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Handler;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -29,9 +30,15 @@ import com.iflytek.cloud.ui.RecognizerDialogListener;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 import snow.music.R;
 import snow.music.activity.browser.album.AlbumBrowserActivity;
 import snow.music.activity.browser.artist.ArtistBrowserActivity;
@@ -45,6 +52,7 @@ import snow.music.activity.setting.SettingActivity;
 import snow.music.store.MusicStore;
 import snow.music.util.FavoriteObserver;
 import snow.music.util.MusicUtil;
+import snow.music.util.PlayerUtils;
 import snow.music.util.SoundPoolUtils;
 import snow.player.PlaybackState;
 import snow.player.PlayerClient;
@@ -255,8 +263,17 @@ public class NavigationViewModel extends ViewModel {
      */
 
     public void testAudio(View view) {
-        SoundPoolUtils.getInstance().playStart();
-        new Handler().postDelayed(new Runnable() {  // 开启的runnable也会在这个handler所依附线程中运行，即主线程
+//        SoundPoolUtils.getInstance().playStart();
+
+//        PlayerUtils.getInstance().play(Uri.parse("http://1257120875.vod2.myqcloud.com/0ef121cdvodtransgzp1257120875/3055695e5285890780828799271/v.f230.m3u8"));
+        postString();
+
+//        PlayerUtils.getInstance().play(Uri.parse("http://music.163.com/song/media/outer/url?id=441722"));
+//        PlayerUtils.getInstance().play(Uri.parse("http://123.56.216.144/audio/7527a9de-d246-11ed-a298-00163e2e4b97_2.mp3"));
+        if (true) {
+            return;
+        }
+        new Handler().postDelayed(new Runnable() {  // 开启的ru    nnable也会在这个handler所依附线程中运行，即主线程
             @Override
             public void run() {
                 mIatResults.clear();
@@ -283,6 +300,26 @@ public class NavigationViewModel extends ViewModel {
 
     }
 
+    public void postString() {
+        OkHttpClient client = new OkHttpClient();
+        MediaType MEDIA_TYPE_TEXT = MediaType.parse("text/plain");
+        String postBody = "{'user_asr': 'user_asr'} ";
+        Request request = new Request.Builder()
+                .url("http://123.56.216.144/api/user-request")
+                .post(RequestBody.create(MEDIA_TYPE_TEXT, postBody))
+                .build();
+        try {
+            Response response = client.newCall(request).execute();
+            if (response != null && response.isSuccessful()) {
+                Log.e("", "");
+            }
+        } catch (Exception e) {
+            Log.e("","");
+        }
+
+
+    }
+
     private HashMap<String, String> mIatResults = new LinkedHashMap<>();
 
     public final ObservableField<String> strResult = new ObservableField<>();
@@ -304,7 +341,7 @@ public class NavigationViewModel extends ViewModel {
         }
         String a = resultBuffer.toString();
         if (isLast) {
-            SoundPoolUtils.getInstance().playEnd();
+//            SoundPoolUtils.getInstance().playEnd();
             Log.e("printResult", a);
             strResult.set(a);
         }

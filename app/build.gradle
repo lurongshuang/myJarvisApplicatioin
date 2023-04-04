@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "snow.music"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 33
         versionCode 4
         versionName "1.2.4"
@@ -45,6 +45,9 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.4.2'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'com.android.support:multidex:1.0.3'
+    implementation project(path: ':exo')
+    implementation 'com.google.android.exoplayer:exoplayer-hls:2.17.0'
+
 
     testImplementation 'junit:junit:4.13.2'
     testImplementation "io.objectbox:objectbox-linux:$objectboxVersion"
