@@ -292,6 +292,9 @@ public class NavigationViewModel extends ViewModel {
      */
 
     public void testAudio(View view) {
+        if (mPlayerViewModel.getPlayerClient().isPlaying()) {
+            mPlayerViewModel.pause();
+        }
         SoundPoolUtils.getInstance().playStart();
         new Handler().postDelayed(new Runnable() {  // 开启的ru    nnable也会在这个handler所依附线程中运行，即主线程
             @Override
