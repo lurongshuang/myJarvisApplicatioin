@@ -316,8 +316,29 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/tvTestAudio1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{(view) -> navViewModel.testAudio1(view)}"
+                android:text="@string/test_audio1" />
+
+            <Button
+                android:id="@+id/tvTestAudio2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{(view) -> navViewModel.testAudio2(view)}"
+                android:text="@string/test_audio2" />
+
+            <Button
+                android:id="@+id/tvTestAudio3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{(view) -> navViewModel.testAudio3(view)}"
+                android:text="@string/test_audio3" />
 
             <Button
                 android:id="@+id/tvTestAudio"
@@ -327,10 +348,10 @@
                 android:text="@string/test_audio" />
 
             <TextView
-                android:layout_width="match_parent"
                 android:id="@+id/tvResult"
-                android:text="@{navViewModel.strResult}"
-                android:layout_height="wrap_content"/>
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{navViewModel.strResult}" />
         </LinearLayout>
 
         <FrameLayout
@@ -354,7 +375,8 @@
                 <FrameLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:visibility="gone">
 
                     <ImageButton
                         android:id="@+id/btnFavorite"

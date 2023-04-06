@@ -188,5 +188,11 @@
     <string name="des_option_menu">option menu</string>
     <string name="des_clock_icon">clock icon</string>
 
-    <string name="test_audio">testAudio</string>
+    <string name="test_audio">自定义输入</string>
+    <string name="test_audio1">大象装进冰箱需要几步</string>
+    <string name="test_audio2">播放不存在之歌</string>
+    <string name="test_audio3">播放爱情转移</string>
+
+
+
 </resources>

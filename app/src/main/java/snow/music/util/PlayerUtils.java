@@ -75,14 +75,11 @@ public class PlayerUtils {
     private HlsMediaSource.Factory mHlsMediaSourceFactory;
     MusicPlayer player;
 
-    public void play(Uri url) {
+    public void play(Uri url, AudioCompletion audioCompletion) {
         if (context == null) {
             return;
         }
-        if (player != null) {
-            player.release();
-        }
-
+        release();
 
         String path = url.getLastPathSegment();
         if (path != null && path.endsWith(".m3u8")) {
@@ -94,19 +91,29 @@ public class PlayerUtils {
         player.setOnCompletionListener(new MusicPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MusicPlayer mp) {
-                Log.e("","");
+                audioCompletion.onCompletionListener();
+                release();
+
             }
         });
         player.setOnErrorListener(new MusicPlayer.OnErrorListener() {
             @Override
             public void onError(MusicPlayer mp, int errorCode) {
-                Log.e("","");
+                audioCompletion.onErrorListener();
+                release();
+
             }
         });
         try {
             player.prepare();
             player.start();
         } catch (Exception e) {
+        }
+    }
+
+    private void release() {
+        if (player != null) {
+            player.release();
         }
     }
 }
