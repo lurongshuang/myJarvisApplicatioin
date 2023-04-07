@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">snow</string>
+    <string name="app_name" translatable="false">闪言</string>
     <string name="search">Search</string>
 
     <!-- NavigationActivity -->
