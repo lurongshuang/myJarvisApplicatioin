@@ -103,9 +103,9 @@ public class RequestUtil {
      */
     private void getInstance() {
         OkHttpClient.Builder builder = new OkHttpClient().newBuilder();
-        builder.connectTimeout(30, TimeUnit.SECONDS);
-        builder.callTimeout(30, TimeUnit.SECONDS);
-        builder.readTimeout(30, TimeUnit.SECONDS);
+        builder.connectTimeout(60, TimeUnit.SECONDS);
+        builder.callTimeout(60, TimeUnit.SECONDS);
+        builder.readTimeout(60, TimeUnit.SECONDS);
         mOkHttpClient = builder.build();
         mRequestBuilder = new Request.Builder();
         if (mFile != null || mfileList != null || mfileMap != null) {//先判断是否有文件，
