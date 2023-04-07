@@ -114,8 +114,8 @@ public class NavigationViewModel extends ViewModel {
         mPlayerViewModel.isError().observeForever(mErrorObserver);
         this.recyclerView = recyclerView;
         initRecyclerView();
-      if(  mPlayerViewModel.isInitialized()){
-      }
+        if (mPlayerViewModel.isInitialized()) {
+        }
     }
 
     private void initRecyclerView() {
@@ -294,7 +294,11 @@ public class NavigationViewModel extends ViewModel {
 
     public void testAudio1(View view) {
         postString(view.getContext(), ((Button) view).getText().toString());
-        ChatMessage leftMessage = new ChatMessage(((Button) view).getText().toString(), ChatMessage.TYPE_SEND);
+        adapterAddMessage(((Button) view).getText().toString(), ChatMessage.TYPE_SEND);
+    }
+
+    private void adapterAddMessage(String message, int type) {
+        ChatMessage leftMessage = new ChatMessage(message, type);
         messages.add(leftMessage);
         adapter.notifyDataSetChanged();
         recyclerView.scrollToPosition(messages.size() - 1);
@@ -382,10 +386,7 @@ public class NavigationViewModel extends ViewModel {
                             playAudio(context, audioUrl, contentUrl);
                         }
                         if (json.has("reply_text")) {
-                            ChatMessage leftMessage = new ChatMessage(json.getString("reply_text"), ChatMessage.TYPE_RECEIVED);
-                            messages.add(leftMessage);
-                            adapter.notifyDataSetChanged();
-                            recyclerView.scrollToPosition(messages.size() - 1);
+                            adapterAddMessage(json.getString("reply_text"), ChatMessage.TYPE_RECEIVED);
                         }
                     } catch (JSONException e) {
                         Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -442,7 +443,7 @@ public class NavigationViewModel extends ViewModel {
 
     private HashMap<String, String> mIatResults = new LinkedHashMap<>();
 
-    public final ObservableField<String> strResult = new ObservableField<>();
+//    public final ObservableField<String> strResult = new ObservableField<>();
 
     private void printResult(Context context, RecognizerResult results, boolean isLast) {
         String text = JsonParser.parseIatResult(results.getResultString());
@@ -462,7 +463,8 @@ public class NavigationViewModel extends ViewModel {
         String a = resultBuffer.toString();
         if (isLast) {
             SoundPoolUtils.getInstance().playEnd();
-            strResult.set(a);
+//            strResult.set(a);
+            adapterAddMessage(a, ChatMessage.TYPE_SEND);
             postString(context, a);
         }
     }
