@@ -11,6 +11,7 @@ import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -20,7 +21,8 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.common.base.Preconditions;
 import com.iflytek.cloud.InitListener;
@@ -32,19 +34,12 @@ import com.iflytek.cloud.ui.RecognizerDialogListener;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
 import okhttp3.Call;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
 import okhttp3.Response;
 import snow.music.R;
 import snow.music.activity.BaseActivity;
@@ -54,6 +49,8 @@ import snow.music.activity.browser.musiclist.MusicListBrowserActivity;
 import snow.music.activity.favorite.FavoriteActivity;
 import snow.music.activity.history.HistoryActivity;
 import snow.music.activity.localmusic.LocalMusicActivity;
+import snow.music.activity.navigation.adapter.ChatAdapter;
+import snow.music.activity.navigation.bean.ChatMessage;
 import snow.music.activity.player.PlayerActivity;
 import snow.music.activity.search.SearchActivity;
 import snow.music.activity.setting.SettingActivity;
@@ -87,6 +84,11 @@ public class NavigationViewModel extends ViewModel {
     private PlayerViewModel mPlayerViewModel;
     private boolean mInitialized;
 
+    private List<ChatMessage> messages = new ArrayList<>();
+    private RecyclerView recyclerView;
+    private Context context;
+    private ChatAdapter adapter;
+
     public NavigationViewModel() {
         mFavoriteDrawable = new MutableLiveData<>(R.drawable.ic_favorite_false);
         mSecondaryText = new MutableLiveData<>("");
@@ -96,9 +98,9 @@ public class NavigationViewModel extends ViewModel {
         mPlayingMusicItemObserver = mFavoriteObserver::setMusicItem;
     }
 
-    public void init(@NonNull PlayerViewModel playerViewModel) {
+    public void init(@NonNull PlayerViewModel playerViewModel, Context context, RecyclerView recyclerView) {
         Preconditions.checkNotNull(playerViewModel);
-
+        this.context = context;
         if (mInitialized) {
             return;
         }
@@ -110,6 +112,19 @@ public class NavigationViewModel extends ViewModel {
         mPlayerViewModel.getPlayingMusicItem().observeForever(mPlayingMusicItemObserver);
         mPlayerViewModel.getArtist().observeForever(mArtistObserver);
         mPlayerViewModel.isError().observeForever(mErrorObserver);
+        this.recyclerView = recyclerView;
+        initRecyclerView();
+    }
+
+    private void initRecyclerView() {
+        LinearLayoutManager manager = new LinearLayoutManager(context);
+        manager.setStackFromEnd(false);
+        manager.setReverseLayout(false);
+        recyclerView.setLayoutManager(manager);
+        adapter = new ChatAdapter(messages);
+        recyclerView.setAdapter(adapter);
+
+
     }
 
     private void updateSecondaryText() {
@@ -274,17 +289,11 @@ public class NavigationViewModel extends ViewModel {
 
 
     public void testAudio1(View view) {
-        postString(view.getContext(), "把大象装进冰箱需要几步");
-
-    }
-
-    public void testAudio2(View view) {
-        postString(view.getContext(), "播放不存在之歌");
-
-    }
-
-    public void testAudio3(View view) {
-        postString(view.getContext(), "播放爱情转移");
+        postString(view.getContext(), ((Button) view).getText().toString());
+        ChatMessage leftMessage = new ChatMessage(((Button) view).getText().toString(), ChatMessage.TYPE_SEND);
+        messages.add(leftMessage);
+        adapter.notifyDataSetChanged();
+        recyclerView.scrollToPosition(messages.size() - 1);
     }
 
     /**
@@ -323,10 +332,16 @@ public class NavigationViewModel extends ViewModel {
 
     }
 
+    String audioUrl = null;
+    String contentUrl = null;
+
     public void postString(Context context, String audioContext) {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("user_asr", audioContext);
+            if (contentUrl != null) {
+                jsonObject.put("content_audio_url", contentUrl);
+            }
         } catch (JSONException e) {
         }
         String strJson = jsonObject.toString();
@@ -352,8 +367,6 @@ public class NavigationViewModel extends ViewModel {
                 if (response != null) {
                     try {
                         JSONObject json = new JSONObject(response);
-                        String audioUrl = null;
-                        String contentUrl = null;
                         if (json.has("reply_audio_url")) {
                             audioUrl = json.getString("reply_audio_url");
                         }
@@ -363,6 +376,12 @@ public class NavigationViewModel extends ViewModel {
 
                         if (audioUrl != null && !audioUrl.isEmpty()) {
                             playAudio(context, audioUrl, contentUrl);
+                        }
+                        if (json.has("reply_text")) {
+                            ChatMessage leftMessage = new ChatMessage(json.getString("reply_text"), ChatMessage.TYPE_RECEIVED);
+                            messages.add(leftMessage);
+                            adapter.notifyDataSetChanged();
+                            recyclerView.scrollToPosition(messages.size() - 1);
                         }
                     } catch (JSONException e) {
                         Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();

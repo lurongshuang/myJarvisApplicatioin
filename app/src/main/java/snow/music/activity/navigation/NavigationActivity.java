@@ -47,6 +47,7 @@ public class NavigationActivity extends BaseActivity {
         mBinding.setNavViewModel(mNavigationViewModel);
         mBinding.setLifecycleOwner(this);
 
+
         observerPlayingMusicItem();
 
 //        if (shouldScanLocalMusic()) {
@@ -77,6 +78,7 @@ public class NavigationActivity extends BaseActivity {
         mNavigationViewModel = viewModelProvider.get(NavigationViewModel.class);
 
         PlayerUtil.initPlayerViewModel(this, mPlayerViewModel, AppPlayerService.class);
+
         initNavigationViewModel();
     }
 
@@ -85,7 +87,7 @@ public class NavigationActivity extends BaseActivity {
             return;
         }
 
-        mNavigationViewModel.init(mPlayerViewModel);
+        mNavigationViewModel.init(mPlayerViewModel, this, mBinding.recyclerList);
     }
 
     private void observerPlayingMusicItem() {
