@@ -331,7 +331,7 @@ public class NavigationViewModel extends ViewModel {
 
                     @Override
                     public void onError(SpeechError speechError) {
-                        Log.e("", "");
+                        adapterAddMessage(speechError.getMessage(), ChatMessage.TYPE_SEND);
                     }
                 });
                 mIatDialog.show();
@@ -351,6 +351,7 @@ public class NavigationViewModel extends ViewModel {
                 jsonObject.put("content_audio_url", contentUrl);
             }
         } catch (JSONException e) {
+            adapterAddMessage(e.getMessage(), ChatMessage.TYPE_SEND);
         }
         String strJson = jsonObject.toString();
         ((BaseActivity) context).showLoading();
@@ -360,6 +361,7 @@ public class NavigationViewModel extends ViewModel {
                 try {
                     return response.body().string();
                 } catch (Exception e) {
+                    adapterAddMessage(e.getMessage(), ChatMessage.TYPE_SEND);
                 }
                 return null;
             }
@@ -367,6 +369,7 @@ public class NavigationViewModel extends ViewModel {
             @Override
             public void onFailure(Call call, Exception e) {
                 ((BaseActivity) context).clearLoading();
+                adapterAddMessage(e.getMessage(), ChatMessage.TYPE_SEND);
             }
 
             @Override
@@ -454,6 +457,7 @@ public class NavigationViewModel extends ViewModel {
             sn = resultJson.optString("sn");
         } catch (JSONException e) {
             e.printStackTrace();
+            adapterAddMessage(e.getMessage(), ChatMessage.TYPE_SEND);
         }
         mIatResults.put(sn, text);
         StringBuffer resultBuffer = new StringBuffer();
