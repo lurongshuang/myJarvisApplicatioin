@@ -101,7 +101,7 @@ import snow.player.util.AsyncResult;
  */
 @SuppressWarnings("SameReturnValue")
 public class PlayerService extends MediaBrowserServiceCompat
-        implements PlayerManager, PlaylistManager, PlaylistEditor, SleepTimer {
+        implements PlayerManager, PlaylistManager, PlaylistEditor, SleepTimer,Nothing {
     /**
      * 默认的 root id，值为 `"root"`。
      */
@@ -442,6 +442,7 @@ public class PlayerService extends MediaBrowserServiceCompat
                 factory,
                 callback
         );
+        mPlayer.setNothingListener(this);
     }
 
     private void initCustomActionDispatcher() {
@@ -1576,6 +1577,11 @@ public class PlayerService extends MediaBrowserServiceCompat
         if (mNotificationView != null) {
             mNotificationView.onPlayModeChanged(playMode);
         }
+    }
+
+    @Override
+    public void nothing() {
+
     }
 
     /**

@@ -114,6 +114,8 @@ public class NavigationViewModel extends ViewModel {
         mPlayerViewModel.isError().observeForever(mErrorObserver);
         this.recyclerView = recyclerView;
         initRecyclerView();
+      if(  mPlayerViewModel.isInitialized()){
+      }
     }
 
     private void initRecyclerView() {
@@ -214,10 +216,9 @@ public class NavigationViewModel extends ViewModel {
     }
 
     public void playPause(View view) {
-        if (mPlayerViewModel.getPlayerClient().getPlaylistSize() == 0) {
-            testAudio(view);
-            return;
-        }
+//        if (mPlayerViewModel.getPlayerClient().getPlaylistSize() == 0) {
+//            testAudio(view);
+//        }
         if (!mInitialized) {
             throw new IllegalStateException("NavigationViewModel not init yet.");
         }

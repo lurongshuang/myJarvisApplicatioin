@@ -129,6 +129,18 @@ class SnowPlayer implements Player, PlaylistEditor {
     private final Factory mFactory;
     private final Callback mCallback;
 
+    private Nothing nothing;
+
+
+    /**
+     * 监听没有可以播放是触发
+     *
+     * @param nothing
+     */
+    void setNothingListener(Nothing nothing) {
+        this.nothing = nothing;
+    }
+
     /**
      * 创建一个 {@link SnowPlayer} 对象。
      *
@@ -1162,6 +1174,9 @@ class SnowPlayer implements Player, PlaylistEditor {
     @Override
     public void play() {
         if (getMusicItem() == null || isMusicPlayerPlaying()) {
+            if (nothing != null) {
+                nothing.nothing();
+            }
             return;
         }
 

@@ -15,6 +15,7 @@ import androidx.core.content.res.ResourcesCompat;
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 import snow.music.R;
+import snow.music.activity.navigation.NavigationActivity;
 import snow.music.activity.player.PlayerActivity;
 import snow.music.store.MusicStore;
 import snow.music.util.FavoriteObserver;
@@ -200,5 +201,14 @@ public class AppPlayerService extends PlayerService {
                     break;
             }
         }
+    }
+
+    @Override
+    public void nothing() {
+        super.nothing();
+        Intent intent = new Intent(getApplicationContext(), NavigationActivity.class);
+        intent.setAction(Intent.ACTION_VOICE_COMMAND);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        getApplicationContext().startActivity(intent);
     }
 }
