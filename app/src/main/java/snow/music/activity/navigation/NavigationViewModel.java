@@ -213,11 +213,14 @@ public class NavigationViewModel extends ViewModel {
         mPlayerViewModel.skipToPrevious();
     }
 
-    public void playPause() {
+    public void playPause(View view) {
+        if (mPlayerViewModel.getPlayerClient().getPlaylistSize() == 0) {
+            testAudio(view);
+            return;
+        }
         if (!mInitialized) {
             throw new IllegalStateException("NavigationViewModel not init yet.");
         }
-
         mPlayerViewModel.playPause();
     }
 

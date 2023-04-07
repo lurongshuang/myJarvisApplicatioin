@@ -440,7 +440,7 @@
                         android:layout_gravity="center"
                         android:background="@drawable/bg_play_pause"
                         android:contentDescription="@string/des_play_pause"
-                        android:onClick="@{() -> navViewModel.playPause()}"
+                        android:onClick="@{(view) -> navViewModel.playPause(view)}"
                         android:padding="8dp"
                         android:scaleType="centerInside"
                         android:src="@{navViewModel.playPauseDrawable}"
