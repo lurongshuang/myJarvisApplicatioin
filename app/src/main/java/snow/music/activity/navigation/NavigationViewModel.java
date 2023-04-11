@@ -27,6 +27,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.common.base.Preconditions;
 import com.iflytek.cloud.InitListener;
 import com.iflytek.cloud.RecognizerResult;
+import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechError;
 import com.iflytek.cloud.ui.RecognizerDialog;
 import com.iflytek.cloud.ui.RecognizerDialogListener;
@@ -304,11 +305,15 @@ public class NavigationViewModel extends ViewModel {
         recyclerView.scrollToPosition(messages.size() - 1);
     }
 
+    public void clickTestAudio(View view) {
+        testAudio(view, null);
+    }
+
     /**
      * 初始化监听器。
      */
 
-    public void testAudio(View view) {
+    public void testAudio(View view, PlaybackState playbackState) {
         if (mPlayerViewModel.getPlayerClient().isPlaying()) {
             mPlayerViewModel.pause();
         }
@@ -326,7 +331,7 @@ public class NavigationViewModel extends ViewModel {
                 mIatDialog.setListener(new RecognizerDialogListener() {
                     @Override
                     public void onResult(RecognizerResult recognizerResult, boolean isLast) {
-                        printResult(view.getContext(), recognizerResult, isLast);
+                        printResult(view.getContext(), recognizerResult, isLast, playbackState);
                     }
 
                     @Override
@@ -334,6 +339,9 @@ public class NavigationViewModel extends ViewModel {
                         adapterAddMessage(speechError.getMessage(), ChatMessage.TYPE_SEND);
                     }
                 });
+                if (playbackState != null) {
+                    mIatDialog.setParameter(SpeechConstant.VAD_BOS, "2000");
+                }
                 mIatDialog.show();
             }
         }, 1000);
@@ -448,7 +456,7 @@ public class NavigationViewModel extends ViewModel {
 
 //    public final ObservableField<String> strResult = new ObservableField<>();
 
-    private void printResult(Context context, RecognizerResult results, boolean isLast) {
+    private void printResult(Context context, RecognizerResult results, boolean isLast, PlaybackState playbackState) {
         String text = JsonParser.parseIatResult(results.getResultString());
         String sn = null;
         // 读取json结果中的sn字段
@@ -467,9 +475,22 @@ public class NavigationViewModel extends ViewModel {
         String a = resultBuffer.toString();
         if (isLast) {
             SoundPoolUtils.getInstance().playEnd();
-//            strResult.set(a);
+            if (playbackState != null && a.isEmpty()) {
+                if (mPlayerViewModel == null) {
+                    return;
+                }
+                if (PlaybackState.PLAYING == playbackState) {
+                    SoundPoolUtils.getInstance().playPlaying();
+                    mPlayerViewModel.play();
+                } else if (PlaybackState.PAUSED == playbackState) {
+                    SoundPoolUtils.getInstance().playPause();
+                    mPlayerViewModel.pause();
+                }
+                return;
+            }
             adapterAddMessage(a, ChatMessage.TYPE_SEND);
             postString(context, a);
+
         }
     }
 }

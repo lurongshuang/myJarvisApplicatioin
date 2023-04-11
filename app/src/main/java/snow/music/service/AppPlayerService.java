@@ -217,6 +217,9 @@ public class AppPlayerService extends PlayerService {
     @NonNull
     @Override
     protected MediaSessionCallback onCreateMediaSessionCallback() {
-        return super.onCreateMediaSessionCallback();
+//        return super.onCreateMediaSessionCallback();
+        return new MyMediaSessionCallback(this, getApplicationContext());
     }
 }
+
+

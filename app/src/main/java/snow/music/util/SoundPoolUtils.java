@@ -24,6 +24,10 @@ public class SoundPoolUtils {
         }
         soundMap.put(1, soundPool.load(context, R.raw.end, 1));
         soundMap.put(0, soundPool.load(context, R.raw.start, 1));
+        soundMap.put(0, soundPool.load(context, R.raw.playing, 1));
+        soundMap.put(0, soundPool.load(context, R.raw.pause, 1));
+
+
     }
 
     SoundPoolUtils() {
@@ -43,5 +47,12 @@ public class SoundPoolUtils {
     public void playEnd() {
         soundPool.play(soundMap.get(1), 1, 1, 2, 0, 1);
     }
+    public void playPlaying() {
+        soundPool.play(soundMap.get(2), 1, 1, 2, 0, 1);
+    }
+    public void playPause() {
+        soundPool.play(soundMap.get(3), 1, 1, 2, 0, 1);
+    }
+
 
 }

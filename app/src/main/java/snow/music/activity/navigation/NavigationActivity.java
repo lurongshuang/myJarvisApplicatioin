@@ -24,6 +24,7 @@ import snow.music.dialog.ScannerDialog;
 import snow.music.service.AppPlayerService;
 import snow.music.util.DimenUtil;
 import snow.music.util.PlayerUtil;
+import snow.player.PlaybackState;
 import snow.player.lifecycle.PlayerViewModel;
 
 public class NavigationActivity extends BaseActivity {
@@ -58,7 +59,7 @@ public class NavigationActivity extends BaseActivity {
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, 123);
         Intent intent = getIntent();
         if (intent.getAction() == Intent.ACTION_VOICE_COMMAND) {
-            mNavigationViewModel.testAudio(findViewById(R.id.tvTestAudio));
+            mNavigationViewModel.testAudio(findViewById(R.id.tvTestAudio), null);
         }
     }
 
@@ -66,7 +67,12 @@ public class NavigationActivity extends BaseActivity {
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         if (intent.getAction() == Intent.ACTION_VOICE_COMMAND) {
-            mNavigationViewModel.testAudio(findViewById(R.id.tvTestAudio));
+            Bundle bundle = intent.getExtras();
+            PlaybackState playbackState = null;
+            if (bundle != null && bundle.containsKey("playbackState")) {
+                playbackState = PlaybackState.valueOf(bundle.getString("playbackState"));
+            }
+            mNavigationViewModel.testAudio(findViewById(R.id.tvTestAudio), playbackState);
         }
     }
 

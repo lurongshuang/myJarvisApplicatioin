@@ -335,7 +335,7 @@
                 android:id="@+id/tvTestAudio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="@{(view) -> navViewModel.testAudio(view)}"
+                android:onClick="@{(view) -> navViewModel.clickTestAudio(view)}"
                 android:text="@string/test_audio"
                 android:textSize="10sp" />
 
