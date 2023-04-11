@@ -4,4 +4,8 @@ package snow.player;// Created byjinengmao
 // Description：
 public interface Nothing {
     void nothing();
+
+//    boolean playGoOn();
+//
+//    boolean pauseGoOn();
 }

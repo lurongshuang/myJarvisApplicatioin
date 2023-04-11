@@ -1179,7 +1179,6 @@ class SnowPlayer implements Player, PlaylistEditor {
             }
             return;
         }
-
         if (isPreparing()) {
             mPreparedAction = new Runnable() {
                 @Override

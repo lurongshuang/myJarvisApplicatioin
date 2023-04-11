@@ -168,11 +168,11 @@ public class AppPlayerService extends PlayerService {
         }
 
         private void addToggleFavorite(NotificationCompat.Builder builder) {
-            if (mFavoriteObserver.isFavorite()) {
-                builder.addAction(R.mipmap.ic_notif_favorite_true, "favorite", mToggleFavorite);
-            } else {
-                builder.addAction(R.mipmap.ic_notif_favorite_false, "don't favorite", mToggleFavorite);
-            }
+//            if (mFavoriteObserver.isFavorite()) {
+//                builder.addAction(R.mipmap.ic_notif_favorite_true, "favorite", mToggleFavorite);
+//            } else {
+//                builder.addAction(R.mipmap.ic_notif_favorite_false, "don't favorite", mToggleFavorite);
+//            }
         }
 
         private void addSkipToPrevious(NotificationCompat.Builder builder) {
@@ -210,5 +210,13 @@ public class AppPlayerService extends PlayerService {
         intent.setAction(Intent.ACTION_VOICE_COMMAND);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         getApplicationContext().startActivity(intent);
+    }
+
+    //onCreateMediaSessionCallback
+
+    @NonNull
+    @Override
+    protected MediaSessionCallback onCreateMediaSessionCallback() {
+        return super.onCreateMediaSessionCallback();
     }
 }

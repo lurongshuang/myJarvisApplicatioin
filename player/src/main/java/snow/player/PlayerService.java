@@ -101,7 +101,7 @@ import snow.player.util.AsyncResult;
  */
 @SuppressWarnings("SameReturnValue")
 public class PlayerService extends MediaBrowserServiceCompat
-        implements PlayerManager, PlaylistManager, PlaylistEditor, SleepTimer,Nothing {
+        implements PlayerManager, PlaylistManager, PlaylistEditor, SleepTimer, Nothing {
     /**
      * 默认的 root id，值为 `"root"`。
      */
@@ -211,6 +211,9 @@ public class PlayerService extends MediaBrowserServiceCompat
 
         preparePlayer();
         keepServiceAlive();
+
+        ///调用测试
+        PlayerService.this.updateNotificationView();
     }
 
     @Override
@@ -1053,12 +1056,12 @@ public class PlayerService extends MediaBrowserServiceCompat
         if (mNotificationView.checkIconExpired()) {
             return;
         }
-
-        MusicItem musicItem = getPlayingMusicItem();
-        if (musicItem == null || shouldClearNotification()) {
-            stopForegroundEx(true);
-            return;
-        }
+///测试注释
+//        MusicItem musicItem = getPlayingMusicItem();
+//        if (musicItem == null || shouldClearNotification()) {
+//            stopForegroundEx(true);
+//            return;
+//        }
 
         if (shouldBeForeground() && !isForeground()) {
             startForeground();
@@ -1317,11 +1320,11 @@ public class PlayerService extends MediaBrowserServiceCompat
         if (noNotificationView()) {
             return;
         }
-
-        if (getPlayingMusicItem() == null) {
-            stopForegroundEx(true);
-            return;
-        }
+//    测试注释
+//        if (getPlayingMusicItem() == null) {
+//            stopForegroundEx(true);
+//            return;
+//        }
 
         mNotificationManager.notify(
                 mNotificationView.getNotificationId(),
@@ -1348,6 +1351,15 @@ public class PlayerService extends MediaBrowserServiceCompat
                 mNotificationView.createNotification()
         );
     }
+
+    //发送空通知，执行占位
+    @RequiresApi(api = Build.VERSION_CODES.S)
+    public void updateNotificationAPINothing() {
+        mNotificationManager.notify(
+                mNotificationView.getNotificationId(),
+                mNotificationView.createPlaceHolderNotification(getString(R.string.snow_waiting_to_play)));
+    }
+
 
     /**
      * 已弃用，请使用 {@link #isCached(MusicItem, SoundQuality, AsyncResult)} 方法代替。
@@ -2526,6 +2538,7 @@ public class PlayerService extends MediaBrowserServiceCompat
                     .setPriority(NotificationCompat.PRIORITY_LOW)
                     .setShowWhen(false)
                     .setAutoCancel(false)
+                    .setOngoing(true)
                     .setStyle(mediaStyle);
 
             onBuildNotification(builder);
@@ -2544,7 +2557,7 @@ public class PlayerService extends MediaBrowserServiceCompat
                     .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                     .setPriority(NotificationCompat.PRIORITY_LOW)
                     .setShowWhen(false)
-                    .setAutoCancel(false);
+                    .setAutoCancel(false).setOngoing(true);
 
             return builder.build();
         }

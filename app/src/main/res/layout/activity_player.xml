@@ -37,7 +37,8 @@
                 android:onClick="finishSelf"
                 android:scaleType="centerInside"
                 android:tint="@color/colorIconTint"
-                app:srcCompat="@drawable/ic_back" />
+                app:srcCompat="@drawable/ic_back"
+                tools:ignore="UseAppTint" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -135,7 +136,8 @@
                     android:scaleType="centerInside"
                     android:tint="@color/colorIconTint"
                     app:srcCompat="@{playerStateViewModel.playModeDrawable}"
-                    tools:srcCompat="@drawable/ic_play_mode_playlist_loop" />
+                    tools:srcCompat="@drawable/ic_play_mode_playlist_loop"
+                    tools:ignore="UseAppTint" />
 
             </FrameLayout>
 
@@ -155,11 +157,14 @@
                     android:scaleType="centerInside"
                     android:tint="@color/colorIconTint"
                     app:srcCompat="@{playerStateViewModel.keepScreenOnDrawable}"
-                    tools:srcCompat="@drawable/ic_keep_screen_on_false" />
+                    tools:srcCompat="@drawable/ic_keep_screen_on_false"
+                    tools:ignore="UseAppTint" />
 
             </FrameLayout>
 
             <FrameLayout
+
+                android:visibility="gone"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
@@ -174,7 +179,8 @@
                     android:onClick="showSleepTimer"
                     android:scaleType="centerInside"
                     android:tint="@color/colorIconTint"
-                    app:srcCompat="@drawable/ic_sleep_timer" />
+                    app:srcCompat="@drawable/ic_sleep_timer"
+                    tools:ignore="UseAppTint" />
 
                 <TextView
                     android:id="@+id/tvSleepTimerProgress"
@@ -204,7 +210,8 @@
                     android:onClick="@{playerStateViewModel::startEqualizerActivity}"
                     android:scaleType="centerInside"
                     android:tint="@color/colorIconTint"
-                    app:srcCompat="@drawable/ic_equalizer" />
+                    app:srcCompat="@drawable/ic_equalizer"
+                    tools:ignore="UseAppTint" />
 
             </FrameLayout>
 
@@ -223,7 +230,8 @@
                     android:onClick="showOptionMenu"
                     android:scaleType="centerInside"
                     android:tint="@color/colorIconTint"
-                    app:srcCompat="@drawable/ic_player_option_menu" />
+                    app:srcCompat="@drawable/ic_player_option_menu"
+                    tools:ignore="UseAppTint" />
 
             </FrameLayout>
 
@@ -285,6 +293,7 @@
             android:orientation="horizontal">
 
             <FrameLayout
+                android:visibility="gone"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
@@ -317,7 +326,8 @@
                     android:onClick="@{() -> playerViewModel.skipToPrevious()}"
                     android:scaleType="centerInside"
                     android:tint="@color/colorIconTint"
-                    app:srcCompat="@drawable/ic_skip_to_previous" />
+                    app:srcCompat="@drawable/ic_skip_to_previous"
+                    tools:ignore="UseAppTint" />
 
             </FrameLayout>
 
@@ -355,7 +365,8 @@
                     android:onClick="@{() -> playerViewModel.skipToNext()}"
                     android:scaleType="centerInside"
                     android:tint="@color/colorIconTint"
-                    app:srcCompat="@drawable/ic_skip_to_next" />
+                    app:srcCompat="@drawable/ic_skip_to_next"
+                    tools:ignore="UseAppTint" />
 
             </FrameLayout>
 
@@ -373,7 +384,8 @@
                     android:onClick="showPlaylist"
                     android:scaleType="centerInside"
                     android:tint="@color/colorIconTint"
-                    app:srcCompat="@drawable/ic_playlist" />
+                    app:srcCompat="@drawable/ic_playlist"
+                    tools:ignore="UseAppTint" />
 
             </FrameLayout>
 
