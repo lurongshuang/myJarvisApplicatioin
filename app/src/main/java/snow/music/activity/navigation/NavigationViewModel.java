@@ -478,7 +478,7 @@ public class NavigationViewModel extends ViewModel {
         }
         String a = resultBuffer.toString();
         if (isLast) {
-            if (playbackState != null && a.isEmpty()) {
+            if (playbackState != null && a.isEmpty() && mPlayerViewModel.getPlayerClient().getPlaylistSize() > 0) {
                 if (mPlayerViewModel == null) {
                     return;
                 }
