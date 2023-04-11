@@ -317,7 +317,11 @@ public class NavigationViewModel extends ViewModel {
         if (mPlayerViewModel.getPlayerClient().isPlaying()) {
             mPlayerViewModel.pause();
         }
-        SoundPoolUtils.getInstance().playStart();
+        if (playbackState != null) {
+            SoundPoolUtils.getInstance().playDi();
+        } else {
+            SoundPoolUtils.getInstance().playStart();
+        }
         new Handler().postDelayed(new Runnable() {  // 开启的ru    nnable也会在这个handler所依附线程中运行，即主线程
             @Override
             public void run() {
@@ -474,7 +478,6 @@ public class NavigationViewModel extends ViewModel {
         }
         String a = resultBuffer.toString();
         if (isLast) {
-            SoundPoolUtils.getInstance().playEnd();
             if (playbackState != null && a.isEmpty()) {
                 if (mPlayerViewModel == null) {
                     return;
@@ -488,6 +491,7 @@ public class NavigationViewModel extends ViewModel {
                 }
                 return;
             }
+            SoundPoolUtils.getInstance().playEnd();
             adapterAddMessage(a, ChatMessage.TYPE_SEND);
             postString(context, a);
 

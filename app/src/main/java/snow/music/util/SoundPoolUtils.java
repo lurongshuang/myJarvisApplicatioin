@@ -22,10 +22,11 @@ public class SoundPoolUtils {
         if (soundMap.size() > 0) {
             soundMap.clear();
         }
-        soundMap.put(1, soundPool.load(context, R.raw.end, 1));
         soundMap.put(0, soundPool.load(context, R.raw.start, 1));
-        soundMap.put(0, soundPool.load(context, R.raw.playing, 1));
-        soundMap.put(0, soundPool.load(context, R.raw.pause, 1));
+        soundMap.put(1, soundPool.load(context, R.raw.end, 1));
+        soundMap.put(2, soundPool.load(context, R.raw.playing, 1));
+        soundMap.put(3, soundPool.load(context, R.raw.pause, 1));
+        soundMap.put(4, soundPool.load(context, R.raw.di, 1));
 
 
     }
@@ -47,12 +48,16 @@ public class SoundPoolUtils {
     public void playEnd() {
         soundPool.play(soundMap.get(1), 1, 1, 2, 0, 1);
     }
+
     public void playPlaying() {
         soundPool.play(soundMap.get(2), 1, 1, 2, 0, 1);
     }
+
     public void playPause() {
         soundPool.play(soundMap.get(3), 1, 1, 2, 0, 1);
     }
 
-
+    public void playDi() {
+        soundPool.play(soundMap.get(4), 1, 1, 2, 0, 1);
+    }
 }
