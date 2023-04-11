@@ -15,13 +15,11 @@
     <uses-permission
         android:name="android.permission.WRITE_SETTINGS"
         tools:ignore="ProtectedPermissions" />
-
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-
-    <!--获取手机录音机使用权限，听写、识别、语义理解需要用到此权限 -->
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <!--外存储写权限，构建语法需要用到此权限 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" /> <!-- 获取手机录音机使用权限，听写、识别、语义理解需要用到此权限 -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" /> <!-- 外存储写权限，构建语法需要用到此权限 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
 
     <application
         android:name=".Application"
@@ -42,83 +40,65 @@
             android:noHistory="true"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Welcome">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
-
         <activity
             android:name=".activity.navigation.NavigationActivity"
+            android:exported="true"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            android:exported="true">
-
+            android:screenOrientation="portrait">
             <intent-filter android:priority="999999999">
                 <action android:name="android.intent.action.VOICE_COMMAND" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-
         </activity>
-
         <activity
             android:name=".activity.setting.SettingActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activity.localmusic.LocalMusicActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activity.favorite.FavoriteActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activity.browser.musiclist.MusicListBrowserActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activity.browser.artist.ArtistBrowserActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activity.browser.album.AlbumBrowserActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activity.history.HistoryActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activity.detail.musiclist.MusicListDetailActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activity.detail.artist.ArtistDetailActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activity.detail.album.AlbumDetailActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activity.multichoice.MusicMultiChoiceActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activity.search.SearchActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activity.player.PlayerActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
-
         <activity
             android:name="snow.player.ui.equalizer.EqualizerActivity"
             android:launchMode="singleTask"
@@ -142,7 +122,6 @@
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
             </intent-filter>
         </receiver>
-
     </application>
 
 </manifest>

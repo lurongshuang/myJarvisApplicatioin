@@ -56,7 +56,7 @@ public class NavigationActivity extends BaseActivity {
 //        }
 
         mIconCornerRadius = DimenUtil.getDimenPx(getResources(), R.dimen.album_icon_corner_radius);
-        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, 123);
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO, Manifest.permission.SYSTEM_ALERT_WINDOW, Manifest.permission.USE_FULL_SCREEN_INTENT}, 123);
         Intent intent = getIntent();
         if (intent.getAction() == Intent.ACTION_VOICE_COMMAND) {
             mNavigationViewModel.testAudio(findViewById(R.id.tvTestAudio), null);
