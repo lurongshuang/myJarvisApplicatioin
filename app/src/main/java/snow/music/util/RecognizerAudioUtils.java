@@ -126,7 +126,7 @@ public class RecognizerAudioUtils {
 
             @Override
             public void onResult(RecognizerResult recognizerResult, boolean isLast) {
-                printResult(context, recognizerResult, isLast, null);
+                printResult(context, recognizerResult, isLast, playbackState);
             }
 
             @Override
