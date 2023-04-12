@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import okhttp3.Call;
 import okhttp3.Response;
@@ -167,10 +168,7 @@ public class RecognizerAudioUtils {
         }
         String a = resultBuffer.toString();
         if (isLast) {
-            if (playbackState != null && a.isEmpty() && playerViewModel.getPlayerClient().getPlaylistSize() > 0) {
-                if (playerViewModel == null) {
-                    return;
-                }
+            if (playerViewModel != null && playbackState != null && playerViewModel.getPlayerClient().getPlaylistSize() > 0 && (a.isEmpty() || (a.length() > 0 && isAllPunctuation(a)))) {
                 if (PlaybackState.PLAYING == playbackState) {
                     SoundPoolUtils.getInstance().playPlaying();
                     playerViewModel.play();
@@ -186,6 +184,14 @@ public class RecognizerAudioUtils {
 
         }
     }
+
+    public boolean isAllPunctuation(String input) {
+        // 定义正则表达式，匹配所有标点符号
+        String regex = "\\p{Punct}+";
+        // 使用正则表达式进行匹配
+        return input.matches(regex);
+    }
+
 
     String audioUrl = null;
     String contentUrl = null;
