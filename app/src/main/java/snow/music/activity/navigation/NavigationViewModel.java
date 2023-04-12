@@ -62,6 +62,7 @@ import snow.music.util.FavoriteObserver;
 import snow.music.util.MusicListUtil;
 import snow.music.util.MusicUtil;
 import snow.music.util.PlayerUtils;
+import snow.music.util.RecognizerAudioUtils;
 import snow.music.util.SoundPoolUtils;
 import snow.music.util.http.CallBackUtil;
 import snow.music.util.http.HttpApi;
@@ -294,11 +295,11 @@ public class NavigationViewModel extends ViewModel {
 
 
     public void testAudio1(View view) {
-        postString(view.getContext(), ((Button) view).getText().toString());
+        RecognizerAudioUtils.getInstance().postString(view.getContext(), ((Button) view).getText().toString());
         adapterAddMessage(((Button) view).getText().toString(), ChatMessage.TYPE_SEND);
     }
 
-    private void adapterAddMessage(String message, int type) {
+    public void adapterAddMessage(String message, int type) {
         ChatMessage leftMessage = new ChatMessage(message, type);
         messages.add(leftMessage);
         adapter.notifyDataSetChanged();
@@ -325,7 +326,7 @@ public class NavigationViewModel extends ViewModel {
         new Handler().postDelayed(new Runnable() {  // 开启的ru    nnable也会在这个handler所依附线程中运行，即主线程
             @Override
             public void run() {
-                mIatResults.clear();
+                RecognizerAudioUtils.getInstance().clearMIatResults();
                 RecognizerDialog mIatDialog = new RecognizerDialog(view.getContext(), new InitListener() {
                     @Override
                     public void onInit(int i) {
@@ -335,7 +336,7 @@ public class NavigationViewModel extends ViewModel {
                 mIatDialog.setListener(new RecognizerDialogListener() {
                     @Override
                     public void onResult(RecognizerResult recognizerResult, boolean isLast) {
-                        printResult(view.getContext(), recognizerResult, isLast, playbackState);
+                        RecognizerAudioUtils.getInstance().printResult(view.getContext(), recognizerResult, isLast, playbackState);
                     }
 
                     @Override
@@ -346,155 +347,156 @@ public class NavigationViewModel extends ViewModel {
                 if (playbackState != null) {
                     mIatDialog.setParameter(SpeechConstant.VAD_BOS, "2000");
                 }
+                mIatDialog.setParameter(SpeechConstant.ASR_PTT, "1");
                 mIatDialog.show();
             }
         }, 1000);
 
     }
 
-    String audioUrl = null;
-    String contentUrl = null;
+//    String audioUrl = null;
+//    String contentUrl = null;
+//
+//    public void postString(Context context, String audioContext) {
+//        JSONObject jsonObject = new JSONObject();
+//        try {
+//            jsonObject.put("user_asr", audioContext);
+//            if (contentUrl != null) {
+//                jsonObject.put("content_audio_url", contentUrl);
+//            }
+//        } catch (JSONException e) {
+//            adapterAddMessage(e.getMessage(), ChatMessage.TYPE_SEND);
+//        }
+//        String strJson = jsonObject.toString();
+//        ((BaseActivity) context).showLoading();
+//        HyrcHttpUtil.httpPostJson(HttpApi.userRequest, strJson, new CallBackUtil<String>() {
+//            @Override
+//            public String onParseResponse(Call call, Response response) {
+//                try {
+//                    return response.body().string();
+//                } catch (Exception e) {
+//                    adapterAddMessage(e.getMessage(), ChatMessage.TYPE_SEND);
+//                }
+//                return null;
+//            }
+//
+//            @Override
+//            public void onFailure(Call call, Exception e) {
+//                ((BaseActivity) context).clearLoading();
+//                adapterAddMessage(e.getMessage(), ChatMessage.TYPE_SEND);
+//            }
+//
+//            @Override
+//            public void onResponse(String response) {
+//                ((BaseActivity) context).clearLoading();
+//                if (response != null) {
+//                    try {
+//                        JSONObject json = new JSONObject(response);
+//                        if (json.has("reply_audio_url")) {
+//                            audioUrl = json.getString("reply_audio_url");
+//                        }
+//                        if (json.has("content_audio_url")) {
+//                            contentUrl = json.getString("content_audio_url");
+//                        }
+//
+//                        if (audioUrl != null && !audioUrl.isEmpty()) {
+//                            playAudio(context, audioUrl, contentUrl);
+//                        }
+//                        if (json.has("reply_text")) {
+//                            adapterAddMessage(json.getString("reply_text"), ChatMessage.TYPE_RECEIVED);
+//                        }
+//                    } catch (JSONException e) {
+//                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+//                    }
+//                }
+//            }
+//        });
+//
+//
+//    }
 
-    public void postString(Context context, String audioContext) {
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put("user_asr", audioContext);
-            if (contentUrl != null) {
-                jsonObject.put("content_audio_url", contentUrl);
-            }
-        } catch (JSONException e) {
-            adapterAddMessage(e.getMessage(), ChatMessage.TYPE_SEND);
-        }
-        String strJson = jsonObject.toString();
-        ((BaseActivity) context).showLoading();
-        HyrcHttpUtil.httpPostJson(HttpApi.userRequest, strJson, new CallBackUtil<String>() {
-            @Override
-            public String onParseResponse(Call call, Response response) {
-                try {
-                    return response.body().string();
-                } catch (Exception e) {
-                    adapterAddMessage(e.getMessage(), ChatMessage.TYPE_SEND);
-                }
-                return null;
-            }
+//    private void playAudio(Context context, String audio_url, String contentUrl) {
+//        ((BaseActivity) context).showLoading();
+//        if (mPlayerViewModel.getPlayerClient().isPlaying()) {
+//            mPlayerViewModel.pause();
+//        }
+//        PlayerUtils.getInstance().play(Uri.parse(audio_url), new AudioCompletion() {
+//            @Override
+//            public void onCompletionListener() {
+//                ((BaseActivity) context).clearLoading();
+//                if (contentUrl != null && !contentUrl.isEmpty()) {
+//                    playMusic(contentUrl);
+//                }
+//            }
+//
+//            @Override
+//            public void onErrorListener() {
+//                ((BaseActivity) context).clearLoading();
+//            }
+//        });
+//    }
 
-            @Override
-            public void onFailure(Call call, Exception e) {
-                ((BaseActivity) context).clearLoading();
-                adapterAddMessage(e.getMessage(), ChatMessage.TYPE_SEND);
-            }
+//    private void playMusic(String contentUrl) {
+//
+//        final Music musicC = new Music(
+//                21313,
+//                "爱情转移",
+//                "artist3",
+//                "album3",
+//                contentUrl,
+//                "https://www.test.com/test3.png",
+//                60_000,
+//                System.currentTimeMillis());
+//        MusicItem musicItem = mPlayerViewModel.getPlayingMusicItem().getValue();
+//        if (musicItem != null && musicItem.getMusicId() == String.valueOf(musicC.getId())) {
+//
+//            return;
+//        }
+//        List<Music> list = new ArrayList<Music>();
+//        list.add(musicC);
+//        Playlist playlist = MusicListUtil.asPlaylist(""/*empty*/, list, 0);
+//        mPlayerViewModel.setPlaylist(playlist, true);
+//    }
 
-            @Override
-            public void onResponse(String response) {
-                ((BaseActivity) context).clearLoading();
-                if (response != null) {
-                    try {
-                        JSONObject json = new JSONObject(response);
-                        if (json.has("reply_audio_url")) {
-                            audioUrl = json.getString("reply_audio_url");
-                        }
-                        if (json.has("content_audio_url")) {
-                            contentUrl = json.getString("content_audio_url");
-                        }
-
-                        if (audioUrl != null && !audioUrl.isEmpty()) {
-                            playAudio(context, audioUrl, contentUrl);
-                        }
-                        if (json.has("reply_text")) {
-                            adapterAddMessage(json.getString("reply_text"), ChatMessage.TYPE_RECEIVED);
-                        }
-                    } catch (JSONException e) {
-                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }
-        });
-
-
-    }
-
-    private void playAudio(Context context, String audio_url, String contentUrl) {
-        ((BaseActivity) context).showLoading();
-        if (mPlayerViewModel.getPlayerClient().isPlaying()) {
-            mPlayerViewModel.pause();
-        }
-        PlayerUtils.getInstance().play(Uri.parse(audio_url), new AudioCompletion() {
-            @Override
-            public void onCompletionListener() {
-                ((BaseActivity) context).clearLoading();
-                if (contentUrl != null && !contentUrl.isEmpty()) {
-                    playMusic(contentUrl);
-                }
-            }
-
-            @Override
-            public void onErrorListener() {
-                ((BaseActivity) context).clearLoading();
-            }
-        });
-    }
-
-    private void playMusic(String contentUrl) {
-
-        final Music musicC = new Music(
-                21313,
-                "爱情转移",
-                "artist3",
-                "album3",
-                contentUrl,
-                "https://www.test.com/test3.png",
-                60_000,
-                System.currentTimeMillis());
-        MusicItem musicItem = mPlayerViewModel.getPlayingMusicItem().getValue();
-        if (musicItem != null && musicItem.getMusicId() == String.valueOf(musicC.getId())) {
-
-            return;
-        }
-        List<Music> list = new ArrayList<Music>();
-        list.add(musicC);
-        Playlist playlist = MusicListUtil.asPlaylist(""/*empty*/, list, 0);
-        mPlayerViewModel.setPlaylist(playlist, true);
-    }
-
-    private HashMap<String, String> mIatResults = new LinkedHashMap<>();
+//    private HashMap<String, String> mIatResults = new LinkedHashMap<>();
 
 //    public final ObservableField<String> strResult = new ObservableField<>();
 
-    private void printResult(Context context, RecognizerResult results, boolean isLast, PlaybackState playbackState) {
-        String text = JsonParser.parseIatResult(results.getResultString());
-        String sn = null;
-        // 读取json结果中的sn字段
-        try {
-            JSONObject resultJson = new JSONObject(results.getResultString());
-            sn = resultJson.optString("sn");
-        } catch (JSONException e) {
-            e.printStackTrace();
-            adapterAddMessage(e.getMessage(), ChatMessage.TYPE_SEND);
-        }
-        mIatResults.put(sn, text);
-        StringBuffer resultBuffer = new StringBuffer();
-        for (String key : mIatResults.keySet()) {
-            resultBuffer.append(mIatResults.get(key));
-        }
-        String a = resultBuffer.toString();
-        if (isLast) {
-            if (playbackState != null && a.isEmpty() && mPlayerViewModel.getPlayerClient().getPlaylistSize() > 0) {
-                if (mPlayerViewModel == null) {
-                    return;
-                }
-                if (PlaybackState.PLAYING == playbackState) {
-                    SoundPoolUtils.getInstance().playPlaying();
-                    mPlayerViewModel.play();
-                } else if (PlaybackState.PAUSED == playbackState) {
-                    SoundPoolUtils.getInstance().playPause();
-                    mPlayerViewModel.pause();
-                }
-                return;
-            }
-            SoundPoolUtils.getInstance().playEnd();
-            adapterAddMessage(a, ChatMessage.TYPE_SEND);
-            postString(context, a);
-
-        }
-    }
+//    private void printResult(Context context, RecognizerResult results, boolean isLast, PlaybackState playbackState) {
+//        String text = JsonParser.parseIatResult(results.getResultString());
+//        String sn = null;
+//        // 读取json结果中的sn字段
+//        try {
+//            JSONObject resultJson = new JSONObject(results.getResultString());
+//            sn = resultJson.optString("sn");
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//            adapterAddMessage(e.getMessage(), ChatMessage.TYPE_SEND);
+//        }
+//        mIatResults.put(sn, text);
+//        StringBuffer resultBuffer = new StringBuffer();
+//        for (String key : mIatResults.keySet()) {
+//            resultBuffer.append(mIatResults.get(key));
+//        }
+//        String a = resultBuffer.toString();
+//        if (isLast) {
+//            if (playbackState != null && a.isEmpty() && mPlayerViewModel.getPlayerClient().getPlaylistSize() > 0) {
+//                if (mPlayerViewModel == null) {
+//                    return;
+//                }
+//                if (PlaybackState.PLAYING == playbackState) {
+//                    SoundPoolUtils.getInstance().playPlaying();
+//                    mPlayerViewModel.play();
+//                } else if (PlaybackState.PAUSED == playbackState) {
+//                    SoundPoolUtils.getInstance().playPause();
+//                    mPlayerViewModel.pause();
+//                }
+//                return;
+//            }
+//            SoundPoolUtils.getInstance().playEnd();
+//            adapterAddMessage(a, ChatMessage.TYPE_SEND);
+//            RecognizerAudioUtils.getInstance().postString(context, a);
+//
+//        }
+//    }
 }

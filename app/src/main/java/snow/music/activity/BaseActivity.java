@@ -36,4 +36,7 @@ public class BaseActivity extends AppCompatActivity {
             dialog.dismiss();
         }
     }
+
+    public void addBean(String message, int type) {
+    }
 }

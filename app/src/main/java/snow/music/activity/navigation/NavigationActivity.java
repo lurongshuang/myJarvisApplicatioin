@@ -24,6 +24,7 @@ import snow.music.dialog.ScannerDialog;
 import snow.music.service.AppPlayerService;
 import snow.music.util.DimenUtil;
 import snow.music.util.PlayerUtil;
+import snow.music.util.RecognizerAudioUtils;
 import snow.player.PlaybackState;
 import snow.player.lifecycle.PlayerViewModel;
 
@@ -94,27 +95,23 @@ public class NavigationActivity extends BaseActivity {
         }
 
         mNavigationViewModel.init(mPlayerViewModel, this, mBinding.recyclerList);
+        RecognizerAudioUtils.getInstance().init(mPlayerViewModel, this);
+
     }
 
     private void observerPlayingMusicItem() {
-        mPlayerViewModel.getPlayingMusicItem()
-                .observe(this, musicItem -> {
-                    if (musicItem == null) {
-                        mBinding.ivDisk.setImageResource(R.mipmap.ic_album_default_icon_big);
-                        return;
-                    }
+        mPlayerViewModel.getPlayingMusicItem().observe(this, musicItem -> {
+            if (musicItem == null) {
+                mBinding.ivDisk.setImageResource(R.mipmap.ic_album_default_icon_big);
+                return;
+            }
 
-                    loadMusicIcon(musicItem.getUri());
-                });
+            loadMusicIcon(musicItem.getUri());
+        });
     }
 
     private void loadMusicIcon(String musicUri) {
-        GlideApp.with(this)
-                .load(musicUri)
-                .placeholder(R.mipmap.ic_album_default_icon_big)
-                .transform(new CenterCrop(), new RoundedCorners(mIconCornerRadius))
-                .transition(DrawableTransitionOptions.withCrossFade())
-                .into(mBinding.ivDisk);
+        GlideApp.with(this).load(musicUri).placeholder(R.mipmap.ic_album_default_icon_big).transform(new CenterCrop(), new RoundedCorners(mIconCornerRadius)).transition(DrawableTransitionOptions.withCrossFade()).into(mBinding.ivDisk);
     }
 
     private boolean shouldScanLocalMusic() {
@@ -123,10 +120,7 @@ public class NavigationActivity extends BaseActivity {
     }
 
     private void scanLocalMusic() {
-        getPreferences(MODE_PRIVATE)
-                .edit()
-                .putBoolean(KEY_SCAN_LOCAL_MUSIC, false)
-                .apply();
+        getPreferences(MODE_PRIVATE).edit().putBoolean(KEY_SCAN_LOCAL_MUSIC, false).apply();
 
         ScannerDialog scannerDialog = ScannerDialog.newInstance(true, true);
         scannerDialog.show(getSupportFragmentManager(), "scannerDialog");
@@ -135,7 +129,12 @@ public class NavigationActivity extends BaseActivity {
     public void showPlaylist(View view) {
         Preconditions.checkNotNull(view);
 
-        PlaylistDialog.newInstance()
-                .show(getSupportFragmentManager(), "Playlist");
+        PlaylistDialog.newInstance().show(getSupportFragmentManager(), "Playlist");
+    }
+
+    @Override
+    public void addBean(String message, int type) {
+//        super.addBean(message, type);
+        mNavigationViewModel.adapterAddMessage(message, type);
     }
 }

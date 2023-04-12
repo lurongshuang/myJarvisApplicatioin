@@ -9,6 +9,7 @@ import com.tencent.mmkv.MMKV;
 import snow.music.store.MusicStore;
 import snow.music.util.NightModeUtil;
 import snow.music.util.PlayerUtils;
+import snow.music.util.RecognizerAudioUtils;
 import snow.music.util.SoundPoolUtils;
 
 public class Application extends MultiDexApplication {
