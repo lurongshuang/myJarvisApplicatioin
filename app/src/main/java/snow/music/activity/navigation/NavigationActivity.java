@@ -8,6 +8,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
@@ -136,5 +137,16 @@ public class NavigationActivity extends BaseActivity {
     public void addBean(String message, int type) {
 //        super.addBean(message, type);
         mNavigationViewModel.adapterAddMessage(message, type);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            startActivity(intent);
+        }
+        return false;
     }
 }
