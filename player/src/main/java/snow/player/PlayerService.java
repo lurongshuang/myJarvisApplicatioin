@@ -212,8 +212,14 @@ public class PlayerService extends MediaBrowserServiceCompat
         preparePlayer();
         keepServiceAlive();
 
-        ///调用测试
-        PlayerService.this.updateNotificationView();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                ///调用测试
+                PlayerService.this.updateNotificationView();
+            }
+        }, 2000);
+
     }
 
     @Override
@@ -1338,18 +1344,20 @@ public class PlayerService extends MediaBrowserServiceCompat
             return;
         }
 
-        if (getPlayingMusicItem() == null) {
+//        if (getPlayingMusicItem() == null) {
+//            mNotificationManager.notify(
+//                    mNotificationView.getNotificationId(),
+//                    mNotificationView.createPlaceHolderNotification(getString(R.string.snow_waiting_to_play))
+//            );
+//            return;
+//        }
+        try {
             mNotificationManager.notify(
                     mNotificationView.getNotificationId(),
-                    mNotificationView.createPlaceHolderNotification(getString(R.string.snow_waiting_to_play))
+                    mNotificationView.createNotification()
             );
-            return;
+        } catch (Exception e) {
         }
-
-        mNotificationManager.notify(
-                mNotificationView.getNotificationId(),
-                mNotificationView.createNotification()
-        );
     }
 
     //发送空通知，执行占位
