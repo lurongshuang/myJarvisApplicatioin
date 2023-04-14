@@ -324,6 +324,31 @@
 
                 android:layout_height="match_parent" />
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <RadioGroup
+                android:id="@+id/rgs"
+                android:layout_width="wrap_content"
+                android:orientation="horizontal"
+                android:layout_height="wrap_content">
+                <RadioButton
+                    android:id="@+id/rb1"
+                    android:layout_width="wrap_content"
+                    android:text="123.56.216.144"
+                    android:checked="@{navViewModel.checkStatus}"
+                    android:layout_height="wrap_content"/>
+
+                <RadioButton
+                    android:layout_marginLeft="10dp"
+                    android:id="@+id/rb2"
+                    android:layout_width="wrap_content"
+                    android:text="3.86.98.234"
+                    android:checked="@{!navViewModel.checkStatus}"
+                    android:layout_height="wrap_content"/>
+
+            </RadioGroup>
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"

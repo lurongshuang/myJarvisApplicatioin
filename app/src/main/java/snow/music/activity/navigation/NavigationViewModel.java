@@ -12,9 +12,11 @@ import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.databinding.Observable;
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -42,6 +44,7 @@ import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Response;
+import snow.music.Application;
 import snow.music.R;
 import snow.music.activity.BaseActivity;
 import snow.music.activity.browser.album.AlbumBrowserActivity;
@@ -90,7 +93,7 @@ public class NavigationViewModel extends ViewModel {
     private RecyclerView recyclerView;
     private Context context;
     private ChatAdapter adapter;
-
+    public final ObservableField<Boolean> checkStatus = new ObservableField<>();
     public NavigationViewModel() {
         mFavoriteDrawable = new MutableLiveData<>(R.drawable.ic_favorite_false);
         mSecondaryText = new MutableLiveData<>("");
@@ -100,7 +103,7 @@ public class NavigationViewModel extends ViewModel {
         mPlayingMusicItemObserver = mFavoriteObserver::setMusicItem;
     }
 
-    public void init(@NonNull PlayerViewModel playerViewModel, Context context, RecyclerView recyclerView) {
+    public void init(@NonNull PlayerViewModel playerViewModel, Context context, RecyclerView recyclerView, RadioGroup radioGroup) {
         Preconditions.checkNotNull(playerViewModel);
         this.context = context;
         if (mInitialized) {
@@ -118,6 +121,18 @@ public class NavigationViewModel extends ViewModel {
         initRecyclerView();
         if (mPlayerViewModel.isInitialized()) {
         }
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                 if(checkedId == R.id.rb1){
+                     Application.HOST =  Application.api1;
+                 }else if(checkedId == R.id.rb2){
+                     Application.HOST =  Application.api2;
+                 }
+            }
+        });
+        checkStatus.set(true);
+
     }
 
     private void initRecyclerView() {

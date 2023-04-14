@@ -27,6 +27,7 @@ import java.util.regex.Pattern;
 
 import okhttp3.Call;
 import okhttp3.Response;
+import snow.music.Application;
 import snow.music.activity.BaseActivity;
 import snow.music.activity.navigation.bean.ChatMessage;
 import snow.music.store.Music;
@@ -208,7 +209,7 @@ public class RecognizerAudioUtils {
         }
         String strJson = jsonObject.toString();
         ((BaseActivity) context).showLoading();
-        HyrcHttpUtil.httpPostJson(HttpApi.userRequest, strJson, new CallBackUtil<String>() {
+        HyrcHttpUtil.httpPostJson(Application.HOST + Application.userRequest, strJson, new CallBackUtil<String>() {
             @Override
             public String onParseResponse(Call call, Response response) {
                 try {
@@ -246,6 +247,7 @@ public class RecognizerAudioUtils {
                         }
                     } catch (JSONException e) {
                         Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        adapterAddMessage(e.getMessage(), ChatMessage.TYPE_RECEIVED);
                     }
                 }
             }

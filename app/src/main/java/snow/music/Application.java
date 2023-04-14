@@ -13,6 +13,13 @@ import snow.music.util.RecognizerAudioUtils;
 import snow.music.util.SoundPoolUtils;
 
 public class Application extends MultiDexApplication {
+    public static final String api1 = "http://123.56.216.144";
+    public static final String api2 = "http://3.86.98.234";
+
+    public static String HOST = api1;
+    //    static String HTTP_HEAD = Application.HOST + "/api/";
+    public static String userRequest = "/api/" + "user-request";
+
     @Override
     public void onCreate() {
         super.onCreate();

@@ -95,7 +95,7 @@ public class NavigationActivity extends BaseActivity {
             return;
         }
 
-        mNavigationViewModel.init(mPlayerViewModel, this, mBinding.recyclerList);
+        mNavigationViewModel.init(mPlayerViewModel, this, mBinding.recyclerList, mBinding.rgs);
         RecognizerAudioUtils.getInstance().init(mPlayerViewModel, this);
 
     }
