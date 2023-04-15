@@ -141,8 +141,8 @@
     <string name="toast_no_read_media_audio_permission">无音频媒体访问权限！</string>
     <string name="description_read_phone_state_rationale">警告！为了避免忽略音频焦点后播放器不会在手机来电期间自动暂停播放，请授予应用读取手机状态权限！</string>
 
-    <string name="test_audio">自定义</string>
-    <string name="test_audio1">大象进冰箱需几步</string>
-    <string name="test_audio2">有哪些有声书</string>
+    <string name="test_audio">语音提问</string>
+    <string name="test_audio1">大象进冰箱需要哪几步？</string>
+    <string name="test_audio2">有哪些有声书？</string>
     <string name="test_audio3">播放爱情转移</string>
 </resources>

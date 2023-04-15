@@ -194,8 +194,8 @@ public class RecognizerAudioUtils {
     }
 
 
-    String audioUrl = null;
-    String contentUrl = null;
+    static String audioUrl = null;
+    static String contentUrl = null;
 
     public void postString(Context context, String audioContext) {
         JSONObject jsonObject = new JSONObject();
