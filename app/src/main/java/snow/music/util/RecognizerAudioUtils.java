@@ -235,7 +235,7 @@ public class RecognizerAudioUtils {
                         if (json.has("reply_audio_url")) {
                             audioUrl = json.getString("reply_audio_url");
                         }
-                        if (json.has("content_audio_url")) {
+                        if (json.has("content_audio_url") && (!json.getString("content_audio_url").isEmpty())) {
                             contentUrl = json.getString("content_audio_url");
                         }
 
