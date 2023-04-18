@@ -194,8 +194,7 @@ public class RecognizerAudioUtils {
     }
 
 
-    static String audioUrl = null;
-    static String contentUrl = null;
+    String contentUrl = null;
 
     public void postString(Context context, String audioContext) {
         JSONObject jsonObject = new JSONObject();
@@ -232,18 +231,23 @@ public class RecognizerAudioUtils {
                 if (response != null) {
                     try {
                         JSONObject json = new JSONObject(response);
+                        String aUrl = null;
+                        String cUrl = null;
                         if (json.has("reply_audio_url")) {
-                            audioUrl = json.getString("reply_audio_url");
+                            aUrl = json.getString("reply_audio_url");
                         }
                         if (json.has("content_audio_url") && (!json.getString("content_audio_url").isEmpty())) {
-                            contentUrl = json.getString("content_audio_url");
+                            cUrl = json.getString("content_audio_url");
                         }
 
-                        if (audioUrl != null && !audioUrl.isEmpty()) {
-                            playAudio(context, audioUrl, contentUrl);
+                        if (aUrl != null && !aUrl.isEmpty()) {
+                            playAudio(context, aUrl, cUrl);
                         }
                         if (json.has("reply_text")) {
                             adapterAddMessage(json.getString("reply_text"), ChatMessage.TYPE_RECEIVED);
+                        }
+                        if (cUrl != null && !cUrl.isEmpty()) {
+                            contentUrl = cUrl;
                         }
                     } catch (JSONException e) {
                         Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -276,16 +280,10 @@ public class RecognizerAudioUtils {
     }
 
     private void playMusic(String contentUrl) {
-
-        final Music musicC = new Music(
-                21313,
-                "爱情转移",
-                "artist3",
-                "album3",
-                contentUrl,
-                "https://www.test.com/test3.png",
-                60_000,
-                System.currentTimeMillis());
+        if (contentUrl == null || contentUrl.isEmpty()) {
+            return;
+        }
+        final Music musicC = new Music(21313, "爱情转移", "artist3", "album3", contentUrl, "https://www.test.com/test3.png", 60_000, System.currentTimeMillis());
         MusicItem musicItem = playerViewModel.getPlayingMusicItem().getValue();
         if (musicItem != null && musicItem.getMusicId() == String.valueOf(musicC.getId())) {
 
